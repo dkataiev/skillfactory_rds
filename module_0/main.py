@@ -7,7 +7,7 @@ def game_core_v2(number):
     count = 1
 
     left_edge = 0
-    right_edge = 100
+    right_edge = 101
 
     predict = (right_edge - left_edge) // 2
     while number != predict and right_edge > left_edge:
@@ -18,9 +18,7 @@ def game_core_v2(number):
             right_edge = predict
         predict = left_edge + (right_edge - left_edge) // 2
 
-    print(str(number) + ":" + str(predict))
     return count  # выход из цикла, если угадали
-
 
 def score_game(game_core):
     '''Запускаем игру 1000 раз, чтобы узнать, как быстро игра угадывает число'''
@@ -32,7 +30,6 @@ def score_game(game_core):
     score = int(np.mean(count_ls))
     print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
     return score
-
 
 # Проверяем
 score_game(game_core_v2)
