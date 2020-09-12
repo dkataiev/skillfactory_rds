@@ -10,7 +10,7 @@ from multiprocessing import Pool
 from pathlib import Path
 from datetime import datetime
 
-GRABBER_ROOT = './module_03/grabber'
+GRABBER_ROOT = './module_03/data'
 CORES_NUMBER = 20
 TRIP_ADVISOR_URL_TEMPLATE = 'https://www.tripadvisor.com{}'
 
@@ -105,6 +105,8 @@ def read_records(filrname):
 def process_file(filename):
     if not filename.endswith('.csv'):
         return
+
+    print(filename)
 
     data_file_name = '{}_data.json'.format(
         filename.split('/')[-1].split('.')[0])
