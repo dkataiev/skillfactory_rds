@@ -7,10 +7,8 @@ import numpy as np
 
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
-from pathlib import Path
-from datetime import datetime
 
-GRABBER_ROOT = './module_03/data'
+GRABBER_ROOT = './data'
 CORES_NUMBER = 20
 TRIP_ADVISOR_URL_TEMPLATE = 'https://www.tripadvisor.com{}'
 
@@ -88,10 +86,9 @@ def parallelize_processing(records):
     return np.concatenate(grabbed_data)
 
 
-def read_records(filrname):
-    file_path = '{}/{}/{}'.format(GRABBER_ROOT, 'urls', filename)
+def read_records(filename):
     records = list()
-    with open(file_path) as csvfile:
+    with open(filename) as csvfile:
         filereader = csv.reader(csvfile)
         for row in filereader:
             row_obj = {}
