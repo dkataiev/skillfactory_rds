@@ -53,6 +53,29 @@ def parse_details_block(node, result):
     result['has_menu'] = 1 if node.find('a', string='Menu') is not None else 0
 
 
+def parse_tr_reviews_block(node, result):
+    if node is None:
+        return
+
+    tr_rating_block = node.find('div', {'data-param': 'trating'})
+    if tr_rating_block is None:
+        return
+
+    ratings = tr_rating_block.find_all('div', recursive=False)
+    if ratings is None:
+        return
+
+    tr_ratings_num = 0
+    for r in ratings:
+        title = 'tr_rating_' + r['data-value']
+        number_text = r.find('span', {'class': 'row_num'}).text
+        number = int(number_text)
+        result[title] = number
+        tr_ratings_num += number
+
+    result['tr_ratings'] = tr_ratings_num
+
+
 def collect_page_data(html, result):
     soup = BeautifulSoup(html, features="lxml")
     overview_tabs = soup.find('div', {'data-tab': 'TABS_OVERVIEW'})
@@ -62,6 +85,9 @@ def collect_page_data(html, result):
     overview_columns = overview_tabs.findAll('div', {'class': 'ui_column'})
     parse_ratings_and_reviews(overview_columns[0], result)
     parse_details_block(overview_columns[1], result)
+
+    review_block = soup.find("div", {"id": "REVIEWS"})
+    parse_tr_reviews_block(review_block, result)
 
     result['distance'] = parse_location_and_contact(overview_columns[2])
     result['has_tcAward'] = 1 if soup.find(
@@ -116,6 +142,7 @@ def process_file(filename):
         json.dump(records_data.tolist(), write_file)
 
 
-for dirname, _, filenames in os.walk('{}/{}'.format(GRABBER_ROOT, 'urls')):
-    for filename in filenames:
-        process_file(os.path.join(dirname, filename))
+if __name__ == '__main__':
+    for dirname, _, filenames in os.walk('{}/{}'.format(GRABBER_ROOT, 'urls')):
+        for filename in filenames:
+            process_file(os.path.join(dirname, filename))
