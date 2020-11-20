@@ -69,6 +69,7 @@ def parse_tr_reviews_block(node, result):
     for r in ratings:
         title = 'tr_rating_' + r['data-value']
         number_text = r.find('span', {'class': 'row_num'}).text
+        number_text = number_text.replace(',', '').replace(' ','')
         number = int(number_text)
         result[title] = number
         tr_ratings_num += number
